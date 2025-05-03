@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: abkaur95/webapp:5   # ← update this in Jenkins
+          image: abkaur95/webapp:7
           ports:
             - containerPort: 5000
           env:
