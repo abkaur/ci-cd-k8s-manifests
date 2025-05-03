@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: abkaur95/webapp:10
+          image: abkaur95/webapp:11
           ports:
             - containerPort: 5000
           env:
