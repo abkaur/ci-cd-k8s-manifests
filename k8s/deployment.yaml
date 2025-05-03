@@ -16,9 +16,12 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: abkaur/webapp:latest  # Jenkins will update this tag
+          image: abkaur95/webapp:5   # ← update this in Jenkins
           ports:
             - containerPort: 5000
           env:
-            - name: PYTHONUNBUFFERED
-              value: "1"
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: ADMIN_PASSWORD
