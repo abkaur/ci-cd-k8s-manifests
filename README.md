@@ -1,29 +1,33 @@
+# 📦 GitOps Manifests for CI/CD Deployment (Argo CD)
 
-## 🏗️ Pipeline Stages (high level)
-1. **Checkout** source from GitHub  
-2. **Build** Docker image  
-3. **SonarQube** analysis (quality gate)  
-4. **Trivy** image scan (fail on high/critical)  
-5. **Push** image to Docker Hub (e.g., `abkaur95/webapp:<buildNumber>`)  
-6. **Bump image tag** in the **manifests repo** (`ci-cd-k8s-manifests/k8s/deployment.yaml`) and push a commit  
-7. **Argo CD** detects the manifest change and deploys to the cluster
+This repository holds the **Kubernetes manifests** for the Python web app.  
+It is updated **automatically by Jenkins** (image tag bump), and **Argo CD** watches this repo to sync the desired state to the cluster.
 
-## 🔗 Linked Repositories
-- **Manifests repo (GitOps):** https://github.com/abkaur/ci-cd-k8s-manifests
+## 🔗 Related App Repository
+- App + pipeline: https://github.com/abkaur/ci-cd-python-webapp
 
-## 🔐 Required Jenkins credentials (examples)
-- `dockerhub-creds` – Docker Hub username/password (or token)
-- `git-manifests-creds` – PAT/SSH key to push to manifests repo
-- `sonarqube-server` – Jenkins global config for SonarQube server URL/token
+## 📂 Structure
+k8s/
+deployment.yaml # image: abkaur95/webapp:<TAG>
+service.yaml
 
-## ⚙️ Environment Variables (examples)
-- `DOCKER_IMAGE=abkaur95/webapp`
-- `MANIFESTS_REPO=https://github.com/abkaur/ci-cd-k8s-manifests.git`
-- `MANIFESTS_PATH=k8s/deployment.yaml`
+## 🔁 How Updates Happen
+1. Jenkins builds & scans the app image (in the app repo).
+2. Jenkins **bumps the `image: ...:<tag>`** in `k8s/deployment.yaml` here and pushes a commit (e.g., “Updated image tag to 11”).
+3. **Argo CD** detects the commit and **syncs** the new image version to the Kubernetes cluster.
 
-## 🧪 Local run (optional)
-```bash
-docker build -t webapp:local .
-docker run -p 8010:8010 webapp:local
-# open http://localhost:8010
+## 🧭 Argo CD Setup (high level)
+- Application source: this repo (path: `k8s/`)
+- Destination: your K8s cluster/namespace
+- Sync policy: Manual or **Auto-Sync** (recommended for continuous delivery)
+
+## 🔐 Notes
+- The manifests are intentionally simple (plain YAML).  
+  You can evolve this into a **Helm chart** later for values management and multi-env support.
+- Ensure your Argo CD app has read access to this repository.
+
+## 🧠 What I Practiced / Learned
+- The **separation of concerns**: app build repo vs. deployment manifests repo
+- **GitOps** with Argo CD (Git as the source of truth)
+- Safe, traceable deployments via **commit history** (e.g., “Updated image tag to 11”)
 
