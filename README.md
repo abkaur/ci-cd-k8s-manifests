@@ -32,3 +32,5 @@ README.md
 - **GitOps** with Argo CD (Git as the source of truth)
 - Safe, traceable deployments via **commit history** (e.g., “Updated image tag to 11”)
 
+
+"For screenshots of Argo CD sync and cluster output, see the April 27 Task Report in the app repository docs folder"
