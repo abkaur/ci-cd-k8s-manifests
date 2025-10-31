@@ -8,8 +8,9 @@ It is updated **automatically by Jenkins** (image tag bump), and **Argo CD** wat
 
 ## 📂 Structure
 k8s/
-deployment.yaml # image: abkaur95/webapp:<TAG>
+deployment.yaml # image: abkaur95/webapp:<TAG> ← Jenkins updates this tag
 service.yaml
+README.md
 
 ## 🔁 How Updates Happen
 1. Jenkins builds & scans the app image (in the app repo).
